@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenClaw Mac Setup</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background: #f8f8fa; }
+    h1 { color: #d7263d; }
+    #output { white-space: pre-wrap; background: #222; color: #cfcfcf; padding: 1em; border-radius: 8px; margin-top: 20px; max-height: 300px; overflow-y: auto; }
+    button { background: #d7263d; color: #fff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1.1em; cursor: pointer; margin-top: 20px; }
+    button:disabled { background: #aaa; }
+    .success { color: #2ecc40; }
+    .fail { color: #d7263d; }
+  </style>
+</head>
+<body>
+  <h1>🦞 OpenClaw Mac Setup</h1>
+  <p>This app will guide you through the OpenClaw installation process for macOS.</p>
+  <button id="runBtn">Run Setup</button>
+  <div id="output"></div>
+  <script>
+    const runBtn = document.getElementById('runBtn');
+    const outputDiv = document.getElementById('output');
+    runBtn.onclick = async () => {
+      runBtn.disabled = true;
+      outputDiv.textContent = 'Running setup...';
+      const result = await window.electronAPI.runScript();
+      if (result.success) {
+        outputDiv.innerHTML = '<span class="success">✅ Setup completed successfully!</span>\n' + result.output;
+      } else {
+        outputDiv.innerHTML = '<span class="fail">❌ Setup failed:</span>\n' + result.output;
+      }
+      runBtn.disabled = false;
+    };
+  </script>
+</body>
+</html>

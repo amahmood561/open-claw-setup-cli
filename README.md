@@ -1,65 +1,498 @@
-# OpenClawSetupApp (macOS GUI)
+# OpenClaw Local macOS Setup
 
-A simple Electron-based macOS app to guide users through the OpenClaw setup process with a user-friendly interface.
+This script installs and configures a fully local [OpenClaw](https://github.com/openclaw/openclaw?utm_source=chatgpt.com) development environment on macOS using:
 
-## Features
-- One-click setup for OpenClaw and dependencies
-- Visual feedback on installation progress and errors
-- Runs the same steps as the provided shell script
+* [Ollama](https://ollama.com?utm_source=chatgpt.com)
+* Qwen local coding model
+* OpenClaw CLI
+* Homebrew
+* Node.js
 
+The setup is optimized for:
 
-## How to Use
-
-### Option 1: Run from Source
-
-1. **Install dependencies:**
-   Open a terminal in the `OpenClawSetupApp` folder and run:
-   ```sh
-   npm install
-   ```
-
-2. **Start the app:**
-   ```sh
-   npm start
-   ```
-
-3. **Run the setup:**
-   - Click the "Run Setup" button in the app window.
-   - The app will execute the setup script and display output and results.
-
-### Option 2: Build a Double-Clickable App (.app)
-
-1. **Build the app bundle:**
-   ```sh
-   npm run package-mac
-   ```
-
-2. **Find the app:**
-   The double-clickable app will be created at:
-   ```
-   OpenClawSetupApp-darwin-universal/OpenClawSetupApp.app
-   ```
-
-3. **Run the app:**
-   - Double-click `OpenClawSetupApp.app` to launch the installer GUI.
-   - You can check this .app into your repository or compress it for distribution.
-
-## Requirements
-- Node.js (v18 or later recommended) for building
-- macOS (Apple Silicon or Intel)
-
-## Notes
-- The app wraps and runs the `install-openclaw-stupid-simple-mac.sh` script. Make sure the script is present in the parent directory.
-- You may be prompted for your password during installation steps (e.g., Xcode license, Homebrew).
-- For onboarding, follow the instructions shown after setup completes.
-- The .app bundle can be distributed or checked into your repository for easy double-click installation.
-
-## Troubleshooting
-- If you see permission errors, try running the app with sufficient privileges or run the shell script directly.
-- For advanced issues, check the output log in the app or run the script in a terminal for more details.
-- If the app does not open, ensure you have allowed apps from identified developers in your macOS Security & Privacy settings.
+* Apple Silicon Macs
+* Local/private AI agents
+* Coding + automation workflows
+* VSCode integration
+* Local LLM execution
 
 ---
 
-**Enjoy a smoother OpenClaw setup experience! 🦞**
-# open-claw-setup-cli
+# What This Script Does
+
+The script automatically:
+
+* Installs Homebrew (if missing)
+* Installs:
+
+  * Git
+  * Node.js
+  * Ollama
+  * OpenClaw CLI
+* Starts Ollama service
+* Downloads local coding model:
+
+  * `qwen2.5-coder:14b`
+* Creates OpenClaw memory folders
+* Verifies installation
+* Prepares onboarding flow
+
+---
+
+# Requirements
+
+## macOS
+
+Recommended:
+
+* macOS Sonoma or newer
+* Apple Silicon (M1/M2/M3/M4)
+
+## Recommended Hardware
+
+| Component | Recommended   |
+| --------- | ------------- |
+| RAM       | 16GB+         |
+| Storage   | 50GB+ free    |
+| CPU       | Apple Silicon |
+
+---
+
+# Installation
+
+## 1. Create Script File
+
+Create:
+
+```bash
+setup-openclaw.sh
+```
+
+Paste the shell script into it.
+
+---
+
+# 2. Make Executable
+
+Run:
+
+```bash
+chmod +x setup-openclaw.sh
+```
+
+---
+
+# 3. Execute
+
+Run:
+
+```bash
+./setup-openclaw.sh
+```
+
+The model download may take several minutes depending on internet speed.
+
+---
+
+# After Script Completes
+
+Run onboarding manually:
+
+```bash
+openclaw onboard --install-daemon
+```
+
+---
+
+# Recommended Onboarding Settings
+
+## Security Disclaimer
+
+Choose:
+
+```text
+Yes
+```
+
+---
+
+## Internet Exposure / Tailscale
+
+Choose:
+
+```text
+No
+```
+
+Keep local-only initially.
+
+---
+
+## Provider
+
+Choose:
+
+```text
+Custom Provider
+```
+
+Then:
+
+```text
+OpenAI-Compatible
+```
+
+---
+
+## Base URL
+
+Use:
+
+```text
+http://localhost:11434/v1
+```
+
+---
+
+## API Key
+
+Use:
+
+```text
+ollama
+```
+
+---
+
+## Model
+
+Use:
+
+```text
+qwen2.5-coder:14b
+```
+
+---
+
+## Messaging Channels
+
+Choose:
+
+```text
+No
+```
+
+Skip Telegram/Discord until local setup is stable.
+
+---
+
+## Gateway Daemon
+
+Choose:
+
+```text
+Yes
+```
+
+---
+
+# Verify Installation
+
+## Check Gateway
+
+```bash
+openclaw gateway status
+```
+
+Expected:
+
+```text
+healthy
+```
+
+---
+
+## Verify Ollama
+
+```bash
+curl http://localhost:11434/api/tags
+```
+
+Should return JSON.
+
+---
+
+## Verify OpenClaw
+
+```bash
+openclaw doctor
+```
+
+---
+
+# First Test Prompt
+
+Run:
+
+```bash
+openclaw agent --local --agent main --message "Create a FastAPI endpoint that uploads CSV files"
+```
+
+---
+
+# Installed Components
+
+| Component     | Purpose                |
+| ------------- | ---------------------- |
+| OpenClaw      | AI agent runtime       |
+| Ollama        | Local LLM server       |
+| Qwen2.5-Coder | Coding/reasoning model |
+| Node.js       | OpenClaw runtime       |
+| Git           | Repo/tool support      |
+
+---
+
+# Memory Directory
+
+Created automatically:
+
+```bash
+~/openclaw-memory
+```
+
+Contains:
+
+```text
+MEMORY.md
+PROJECTS.md
+WORKFLOWS.md
+```
+
+Useful for persistent agent context.
+
+---
+
+# Common Commands
+
+## Start Gateway
+
+```bash
+openclaw gateway start
+```
+
+---
+
+## Stop Gateway
+
+```bash
+openclaw gateway stop
+```
+
+---
+
+## Open Dashboard
+
+```bash
+openclaw dashboard
+```
+
+Then open:
+
+```text
+http://127.0.0.1:18789
+```
+
+---
+
+## Start Ollama
+
+```bash
+ollama serve
+```
+
+---
+
+## Pull Additional Models
+
+```bash
+ollama pull deepseek-coder-v2
+ollama pull llama3.1:8b
+```
+
+---
+
+# Updating Models
+
+Update Ollama models:
+
+```bash
+ollama pull qwen2.5-coder:14b
+```
+
+---
+
+# Uninstall
+
+## Remove OpenClaw
+
+```bash
+brew uninstall openclaw-cli
+rm -rf ~/.openclaw
+```
+
+---
+
+## Remove Ollama
+
+```bash
+brew uninstall ollama
+rm -rf ~/.ollama
+```
+
+---
+
+# Security Notes
+
+OpenClaw can:
+
+* access files
+* execute shell commands
+* automate workflows
+
+Initially:
+
+* keep local-only
+* avoid unrestricted shell tools
+* do not expose publicly
+* avoid connecting production credentials
+
+---
+
+# Recommended Future Stack
+
+For advanced workflows:
+
+```text
+VSCode
+  ↓
+Continue.dev / OpenClaw
+  ↓
+Ollama
+  ↓
+Local Models
+  ↓
+Docker Sandbox
+  ↓
+Postgres + pgvector
+```
+
+---
+
+# Recommended Models
+
+| Model             | Use Case           |
+| ----------------- | ------------------ |
+| qwen2.5-coder:14b | Best balance       |
+| deepseek-coder-v2 | Strong reasoning   |
+| llama3.1:8b       | Lightweight        |
+| qwen3:14b         | Advanced reasoning |
+
+---
+
+# Troubleshooting
+
+## Ollama Not Running
+
+```bash
+brew services start ollama
+```
+
+---
+
+## Model Missing
+
+```bash
+ollama pull qwen2.5-coder:14b
+```
+
+---
+
+## Gateway Not Healthy
+
+```bash
+openclaw doctor
+```
+
+---
+
+## Node Version Issues
+
+OpenClaw requires:
+
+* Node 22+
+* Recommended: Node 24
+
+Check:
+
+```bash
+node -v
+```
+
+---
+
+# Recommended Next Steps
+
+Once stable locally:
+
+* Connect VSCode
+* Add Docker sandboxing
+* Configure filesystem tools
+* Add PostgreSQL memory
+* Build custom agents
+* Add LangGraph/MCP workflows later
+
+---
+
+# Packaging the OpenClawSetupApp GUI (macOS)
+
+To build and package the OpenClawSetupApp Electron GUI as a DMG for macOS:
+
+## 1. Install Dependencies
+
+Navigate to the app directory and install dependencies:
+
+```bash
+cd OpenClawSetupApp
+npm install
+```
+
+## 2. Package the App for macOS
+
+Run the packaging script (creates a universal macOS build):
+
+```bash
+npm run package-mac
+```
+
+This will generate the `OpenClawSetupApp-darwin-universal` folder with the `.app` bundle inside.
+
+## 3. Create a DMG File
+
+Use this one-liner to generate a DMG from the packaged app:
+
+```bash
+hdiutil create -volname "OpenClawSetupApp" -srcfolder OpenClawSetupApp-darwin-universal/OpenClawSetupApp.app -ov -format UDZO OpenClawSetupApp.dmg
+```
+
+## 4. All-in-One Command
+
+You can run all steps in one line (from inside `OpenClawSetupApp`):
+
+```bash
+npm install && npm run package-mac && hdiutil create -volname "OpenClawSetupApp" -srcfolder OpenClawSetupApp-darwin-universal/OpenClawSetupApp.app -ov -format UDZO OpenClawSetupApp.dmg
+```
+
+This will:
+- Install dependencies
+- Package the Electron app
+- Create a DMG file ready for distribution

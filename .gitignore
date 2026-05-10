@@ -1,0 +1,15 @@
+OpenClawSetupApp-darwin-universal/
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# Electron packaged apps
+/OpenClawSetupApp-darwin-universal/
+/OpenClawSetupApp-win32-*/
+/OpenClawSetupApp-linux-*/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
