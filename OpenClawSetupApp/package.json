@@ -6,7 +6,9 @@
   "scripts": {
     "start": "electron .",
     "test": "node --test",
-    "package-mac": "electron-packager . OpenClawSetupApp --platform=darwin --arch=universal --overwrite"
+    "prepackage-mac": "cp ../install-openclaw-stupid-simple-mac.sh ./install-openclaw-stupid-simple-mac.sh",
+    "package-mac": "electron-packager . OpenClawSetupApp --platform=darwin --arch=universal --overwrite",
+    "build:dmg": "npm run package-mac && mkdir -p dist && hdiutil create -volname OpenClawSetupApp -srcfolder OpenClawSetupApp-darwin-universal/OpenClawSetupApp.app -ov -format UDZO dist/OpenClawSetupApp-$npm_package_version.dmg"
   },
   "dependencies": {
     "electron": "^28.2.3"
