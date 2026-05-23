@@ -19,20 +19,6 @@
   <p>This app will guide you through the OpenClaw installation process for macOS.</p>
   <button id="runBtn">Run Setup</button>
   <div id="output"></div>
-  <script>
-    const runBtn = document.getElementById('runBtn');
-    const outputDiv = document.getElementById('output');
-    runBtn.onclick = async () => {
-      runBtn.disabled = true;
-      outputDiv.textContent = 'Running setup...';
-      const result = await window.electronAPI.runScript();
-      if (result.success) {
-        outputDiv.innerHTML = '<span class="success">✅ Setup completed successfully!</span>\n' + result.output;
-      } else {
-        outputDiv.innerHTML = '<span class="fail">❌ Setup failed:</span>\n' + result.output;
-      }
-      runBtn.disabled = false;
-    };
-  </script>
+  <script src="./renderer.js"></script>
 </body>
 </html>

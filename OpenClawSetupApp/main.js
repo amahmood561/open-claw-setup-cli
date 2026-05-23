@@ -1,6 +1,6 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
-const { exec } = require('child_process');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const { runSetupScript } = require('./setupRunner');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -8,33 +8,39 @@ function createWindow() {
     height: 700,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
-      contextIsolation: false
+      nodeIntegration: false,
+      contextIsolation: true
     }
   });
   win.loadFile('index.html');
 }
 
-app.whenReady().then(() => {
-  createWindow();
+function registerIpcHandlers() {
+  ipcMain.handle('run-script', async () => runSetupScript());
+}
 
-  app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
-});
+function startApp() {
+  registerIpcHandlers();
 
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit();
-});
+  app.whenReady().then(() => {
+    createWindow();
 
-ipcMain.handle('run-script', async (event) => {
-  return new Promise((resolve, reject) => {
-    exec('bash ../install-openclaw-stupid-simple-mac.sh', { cwd: __dirname }, (error, stdout, stderr) => {
-      if (error) {
-        resolve({ success: false, output: stderr || error.message });
-      } else {
-        resolve({ success: true, output: stdout });
-      }
+    app.on('activate', function () {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
   });
-});
+
+  app.on('window-all-closed', function () {
+    if (process.platform !== 'darwin') app.quit();
+  });
+}
+
+if (require.main === module) {
+  startApp();
+}
+
+module.exports = {
+  createWindow,
+  registerIpcHandlers,
+  startApp
+};

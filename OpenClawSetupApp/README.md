@@ -27,6 +27,35 @@ A simple Electron-based macOS app to guide users through the OpenClaw setup proc
    - Click the "Run Setup" button in the app window.
    - The app will execute the setup script and display output and results.
 
+### Mock Walkthrough
+
+Use this when you want to test the app flow without running the real OpenClaw installer:
+
+1. Create a temporary mock installer:
+   ```sh
+   printf '%s\n' '#!/usr/bin/env bash' 'echo "mock: checking macOS"' 'echo "mock: installing dependencies"' 'echo "mock: OpenClaw ready"' > /tmp/openclaw-mock-install.sh
+   chmod +x /tmp/openclaw-mock-install.sh
+   ```
+
+2. Start the Electron app with the mock script:
+   ```sh
+   OPENCLAW_SETUP_SCRIPT=/tmp/openclaw-mock-install.sh npm start
+   ```
+
+3. Click **Run Setup** in the app.
+
+4. Verify the output panel shows:
+   - `Setup completed successfully!`
+   - `mock: checking macOS`
+   - `mock: installing dependencies`
+   - `mock: OpenClaw ready`
+
+Run the automated tests with:
+
+```sh
+npm test
+```
+
 ### Option 2: Build a Double-Clickable App (.app)
 
 1. **Build the app bundle:**

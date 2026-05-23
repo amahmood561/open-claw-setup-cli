@@ -13,3 +13,4 @@ OpenClawSetupApp-darwin-universal/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+LandingPage/node_modules/*

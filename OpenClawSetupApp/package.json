@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "test": "node --test",
     "package-mac": "electron-packager . OpenClawSetupApp --platform=darwin --arch=universal --overwrite"
   },
   "dependencies": {
